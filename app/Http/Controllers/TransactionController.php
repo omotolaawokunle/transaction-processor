@@ -20,7 +20,7 @@ class TransactionController extends Controller
 
             return response()->json([
                 'status' => 1,
-                'transaction' => $transaction
+                'data' => $transaction
             ], 201);
         } catch (InsufficientFundsException $e) {
             return response()->json([
