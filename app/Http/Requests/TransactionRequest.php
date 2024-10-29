@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\TransactionType;
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class TransactionRequest extends FormRequest
@@ -11,7 +13,7 @@ class TransactionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +24,8 @@ class TransactionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'amount' => ['required', 'numeric','min:0.01'],
+            'type' => ['required', Rule::enum(TransactionType::class)]
         ];
     }
 }
