@@ -11,7 +11,7 @@ class GetBalance extends Controller
      */
     public function __invoke(Request $request)
     {
-        $balance = $request->user()->balance->amount ?? 0;
+        $balance = $request->user()->balance->balance ?? 0;
 
         return response()->json([
             'status' => 1,

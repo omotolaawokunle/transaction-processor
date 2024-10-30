@@ -16,7 +16,7 @@ class TransactionController extends Controller
     {
         try {
             $type = TransactionType::from($request->type);
-            $transaction = $this->transactionService->processTransaction($request->user, $request->amount, $type);
+            $transaction = $this->transactionService->processTransaction($request->user(), $request->amount, $type);
 
             return response()->json([
                 'status' => 1,

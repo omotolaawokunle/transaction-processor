@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Balance;
 use Illuminate\Support\Str;
 use App\Enums\TransactionType;
+use App\Enums\TransactionStatus;
 use Illuminate\Support\Facades\DB;
 use App\Exceptions\InsufficientFundsException;
 
@@ -21,17 +22,17 @@ class TransactionService
                 $balance = new Balance(['user_id' => $user->id, 'balance' => 0]);
             }
 
-            if ($type->value === TransactionType::DEBIT && $balance->amount < $amount) {
+            if ($type->value === TransactionType::DEBIT->value && $balance->balance < $amount) {
                 throw new InsufficientFundsException('Insufficient funds!');
             }
-            $signedAmount = $amount * ($type->value === TransactionType::CREDIT ? 1 : -1);
-            $balance->amount += $signedAmount;
+            $signedAmount = $amount * ($type->value === TransactionType::CREDIT->value ? 1 : -1);
+            $balance->balance += $signedAmount;
             $balance->save();
 
             return $user->transactions()->create([
                 'amount' => $signedAmount,
                 'type' => $type->value,
-                'status' => 'completed',
+                'status' => TransactionStatus::COMPLETED->value,
                 'user_id' => $user->id,
                 'reference' => Str::uuid(),
             ]);
